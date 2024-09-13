@@ -8,7 +8,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  allowedHeaders: "*",
+  origin:"*",
+}));
 app.use(express.json());
 
 app.get("/", function (req, res) {
