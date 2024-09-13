@@ -4,10 +4,7 @@ import { sendEmail } from "./emailSendFunction.js";
 import { GoogleAIFileManager } from "@google/generative-ai/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Initialize GoogleAIFileManager with your API_KEY.
-const fileManager = new GoogleAIFileManager(
-  "AIzaSyAqdpNncr9BLJvPvS1rOvZfv3Wr5ex6QDQ"
-);
+
 
 const app = express();
 
@@ -17,19 +14,7 @@ app.use(express.json());
 app.get("/", function (req, res) {
   res.send("ok server is listening 8000");
 });
-let uploadResponse;
-const uplopadFile = async () => {
-  // Upload the file and specify a display name.
-  uploadResponse = await fileManager.uploadFile("file.pdf", {
-    mimeType: "application/pdf",
-    displayName: "Gemini 1.5 PDF",
-  });
-  
-  console.log(
-    `Uploaded file ${uploadResponse.file.displayName} as: ${uploadResponse.file.uri}`
-  );
-};
-uplopadFile();
+
 app.post("/send-mail", async (req, res) => {
   try {
     const { message } = req.body;
@@ -45,10 +30,24 @@ app.post("/send-mail", async (req, res) => {
 });
 
 app.post("/message", async (req, res) => {
+  // Initialize GoogleAIFileManager with your API_KEY.
+  const fileManager = new GoogleAIFileManager(
+    "AIzaSyBKZatzIoctt0_arla80wDMgGmZP202jHw"
+  );
   const { message } = req.body;
   console.log(message);
   const genAI = new GoogleGenerativeAI(
     "AIzaSyAqdpNncr9BLJvPvS1rOvZfv3Wr5ex6QDQ"
+  );
+
+  // Upload the file and specify a display name.
+  const uploadResponse = await fileManager.uploadFile("file.pdf", {
+    mimeType: "application/pdf",
+    displayName: "Gemini 1.5 PDF",
+  });
+
+  console.log(
+    `Uploaded file ${uploadResponse.file.displayName} as: ${uploadResponse.file.uri}`
   );
 
   // Use the "gemini-1.5-flash" model instead of the deprecated "gemini-pro-vision"
