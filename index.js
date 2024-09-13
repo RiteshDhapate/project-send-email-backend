@@ -6,7 +6,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Initialize GoogleAIFileManager with your API_KEY.
 const fileManager = new GoogleAIFileManager(
-  "AIzaSyBKZatzIoctt0_arla80wDMgGmZP202jHw"
+  "AIzaSyAqdpNncr9BLJvPvS1rOvZfv3Wr5ex6QDQ"
 );
 
 const app = express();
@@ -48,7 +48,7 @@ app.post("/message", async (req, res) => {
   const { message } = req.body;
   console.log(message);
   const genAI = new GoogleGenerativeAI(
-    "AIzaSyBKZatzIoctt0_arla80wDMgGmZP202jHw"
+    "AIzaSyAqdpNncr9BLJvPvS1rOvZfv3Wr5ex6QDQ"
   );
 
   // Use the "gemini-1.5-flash" model instead of the deprecated "gemini-pro-vision"
