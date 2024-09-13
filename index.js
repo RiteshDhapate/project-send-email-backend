@@ -35,44 +35,49 @@ app.post("/send-mail", async (req, res) => {
 });
 
 app.post("/message", async (req, res) => {
-  // Initialize GoogleAIFileManager with your API_KEY.
-  const fileManager = new GoogleAIFileManager(
-    "AIzaSyBKZatzIoctt0_arla80wDMgGmZP202jHw"
-  );
-  const { message } = req.body;
-  console.log(message);
-  const genAI = new GoogleGenerativeAI(
-    "AIzaSyAqdpNncr9BLJvPvS1rOvZfv3Wr5ex6QDQ"
-  );
+  try {
+    // Initialize GoogleAIFileManager with your API_KEY.
+    const fileManager = new GoogleAIFileManager(
+      "AIzaSyBKZatzIoctt0_arla80wDMgGmZP202jHw"
+    );
+    const { message } = req.body;
+    console.log(message);
+    const genAI = new GoogleGenerativeAI(
+      "AIzaSyAqdpNncr9BLJvPvS1rOvZfv3Wr5ex6QDQ"
+    );
 
-  // Upload the file and specify a display name.
-  const uploadResponse = await fileManager.uploadFile("file.pdf", {
-    mimeType: "application/pdf",
-    displayName: "Gemini 1.5 PDF",
-  });
+    // Upload the file and specify a display name.
+    const uploadResponse = await fileManager.uploadFile("file.pdf", {
+      mimeType: "application/pdf",
+      displayName: "Gemini 1.5 PDF",
+    });
 
-  console.log(
-    `Uploaded file ${uploadResponse.file.displayName} as: ${uploadResponse.file.uri}`
-  );
+    console.log(
+      `Uploaded file ${uploadResponse.file.displayName} as: ${uploadResponse.file.uri}`
+    );
 
-  // Use the "gemini-1.5-flash" model instead of the deprecated "gemini-pro-vision"
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // Use the "gemini-1.5-flash" model instead of the deprecated "gemini-pro-vision"
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-  // Generate content using text and the URI reference for the uploaded file.
-  const result = await model.generateContent([
-    {
-      fileData: {
-        mimeType: uploadResponse.file.mimeType,
-        fileUri: uploadResponse.file.uri,
+    // Generate content using text and the URI reference for the uploaded file.
+    const result = await model.generateContent([
+      {
+        fileData: {
+          mimeType: uploadResponse.file.mimeType,
+          fileUri: uploadResponse.file.uri,
+        },
       },
-    },
-    { text: message },
-  ]);
+      { text: message },
+    ]);
 
-  const response = await result.response;
-  const text = response.text();
-  console.log(text);
-  res.json({ result: text });
+    const response = await result.response;
+    const text = response.text();
+    console.log(text);
+    res.json({ result: text });
+  } catch (error) {
+    res.json({success:false});
+    console.log(error);
+  }
 });
 
 app.listen(8000, () => {
