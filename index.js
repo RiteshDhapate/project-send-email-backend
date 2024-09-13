@@ -8,10 +8,12 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const app = express();
 
-app.use(cors({
-  allowedHeaders: "*",
-  origin:"*",
-}));
+app.use(
+  cors({
+    allowedHeaders: "*",
+    origin: ["https://project-email-send-frontend.vercel.app"],
+  })
+);
 app.use(express.json());
 
 app.get("/", function (req, res) {
